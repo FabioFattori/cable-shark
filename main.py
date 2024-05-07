@@ -10,6 +10,7 @@ import sys
 import ipAddress
 import addIpAddressToList
 import pinger #import the pinger.py file
+import Resizator
 
 
 
@@ -52,6 +53,8 @@ def refreshAll():
 # Create main window
 root = tk.Tk()
 root.title(title)
+resizator = Resizator.Resizator(root)
+resizator.bind_config()
 
 
 
@@ -64,11 +67,11 @@ rst = tk.Frame(root)
 rst.pack(side=tk.RIGHT)
 
 #set the size of the frames
-lst.config(width=300, height=400)
-rst.config(width=400, height=400)
+lst.config(width=int(resizator.getWidth()/2), height=int(resizator.getHeight()),pady=10,padx=10)
+rst.config(width=int(resizator.getWidth()/2), height=int(resizator.getHeight()),pady=10,padx=10)
 
 # Create input field
-entry = tk.Entry(rst, width=30)
+entry = tk.Entry(rst, width=int(resizator.getWidth()/20))
 entry.pack(pady=10, side=tk.TOP)
 
 # Create ping button
@@ -89,11 +92,19 @@ output_text.pack(side=tk.TOP, pady=10,after=state_label)
 button_container = tk.Frame(lst)
 button_container.pack(side=tk.TOP)
 
+# create a container list for all the ip addresses
+ip_addresses_container = tk.Frame(lst,height=int(resizator.getHeight()/2))
+ip_addresses_container.pack(side=tk.TOP,after=button_container,pady=10,padx=10)
 
-add_to_list_button = tk.Button(button_container, text="Add to list", command=lambda:addIpAddressToList.add(lst,ip_addresses,entry.get(),state_label.cget("text").split(":")[1]))
+
+
+add_to_list_button = tk.Button(button_container, text="Add to list", command=lambda:addIpAddressToList.add(ip_addresses_container,ip_addresses,entry.get(),state_label.cget("text").split(":")[1]))
 add_to_list_button.pack(pady=10, side=tk.TOP)
 
 refresh_all_button = tk.Button(button_container, text="Refresh all", command=lambda: refreshAll())
 refresh_all_button.pack(pady=10, side=tk.TOP)
 # Run the main event loop
+addIpAddressToList.updateList(ip_addresses_container,ip_addresses)
+
+
 root.mainloop()
