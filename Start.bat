@@ -23,3 +23,34 @@ if %py_major_version% leq 3 (
 ) else (
     echo Python version is 3.11 or greater.
 )
+
+@echo off
+
+REM Check if requirements.txt file exists
+if not exist Dependencies/requirements.txt (
+    echo Dependencies/requirements.txt file not found.
+    exit /b 1
+)
+
+REM Read dependencies from requirements.txt
+for /f %%i in (Dependencies/requirements.txt) do (
+    REM Check if dependency is installed
+    python -c "import %%i" >nul 2>&1
+    if errorlevel 1 (
+        echo %%i is not installed. Installing...
+        REM Attempt to install dependency using pip
+        pip install %%i
+        if errorlevel 1 (
+            echo Failed to install %%i. Please install it manually.
+        ) else (
+            echo %%i installed successfully.
+        )
+    ) else (
+        echo %%i is already installed.
+    )
+)
+
+echo Dependency check completed.
+
+REM Start the main Python script
+python main.py

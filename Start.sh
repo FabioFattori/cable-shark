@@ -31,5 +31,8 @@ else
     echo "Python updated to version 3.11."
 fi
 
+cd Dependencies/
+./dependencies.sh
+cd ..
 
 python3 main.py;
