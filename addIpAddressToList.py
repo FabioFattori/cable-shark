@@ -1,6 +1,13 @@
 import ipAddress
 import addIpAddressToList
+import threading
 import tkinter as tk
+
+lock = threading.Lock()
+
+def getLock():
+    return lock
+
 def add(window,container,ipEntered,state):
     #check if the ip is already in the list
     for ip in container:
@@ -14,8 +21,7 @@ def add(window,container,ipEntered,state):
     label.pack(side=tk.TOP)
     label2=tk.Label(mainC,text=ip.__get_state__())
     label2.pack(side=tk.TOP)
-    addIpAddressToList.updateList(window.ip_addresses_container,container)
-    ip.automaticPing(window,container)
+    ip.automaticPing(window,container,addIpAddressToList.getLock())
 
 def updateList(windowContainer,container):
    
