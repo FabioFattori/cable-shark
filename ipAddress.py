@@ -7,13 +7,18 @@ class ipAddress:
     def __init__(self, ip, old_state=requestResponsens.res[2]):
         self.ip = ip
         self.old_state = old_state
-        self.timer = time.time()
+        self.automaticPingThread = None
 
     def __get_ip__(self):
         return self.ip
     
     def __get_state__(self):
         return self.old_state
+    
+    def stopPing(self):
+        #stop the thread
+        self.automaticPingThread.cancel()
+        return
     
     def pingMe(self,lock):
         with lock:
@@ -34,4 +39,5 @@ class ipAddress:
         #wait for 5 seconds before pinging the ip again
         print("pinging")
         addIpAddressToList.updateList(manager.getAll().ip_addresses_container,ip_addresses)
-        threading.Timer(10,self.automaticPing,args=[manager,ip_addresses,lock]).start()
+        self.automaticPingThread=threading.Timer(10,self.automaticPing,args=[manager,ip_addresses,lock])
+        self.automaticPingThread.start()

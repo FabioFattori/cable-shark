@@ -1,10 +1,12 @@
 import tkinter as tk
-import time
 import Resizator
 import addIpAddressToList
 
 class GraphicsManager:
-    def exitProgram(self):
+    def exitProgram(self,ip_addresses):
+        #kill all the threads
+        for ip in ip_addresses:
+            ip.stopPing()
         self.root.destroy()
         exit(0)
 
@@ -15,7 +17,7 @@ class GraphicsManager:
         self.root.minsize(400,300)
         self.resizator = Resizator.Resizer(toplevel=self.root,manager=self)
         self.resizator.bind_config()
-        self.root.protocol("WM_DELETE_WINDOW", self.exitProgram)
+        self.root.protocol("WM_DELETE_WINDOW", lambda:self.exitProgram(ip_addresses=ip_addresses))
 
 
 
@@ -63,14 +65,17 @@ class GraphicsManager:
 
 
 
-        self.add_to_list_button = tk.Button(self.button_container, text="Add to list", command=lambda:addIpAddressToList.add(self,ip_addresses,self.entry.get(),self.state_label.cget("text").split(":")[1]))
-        self.add_to_list_button.pack(pady=10, side=tk.TOP)
-        self.add_to_list_button.config(width=int(self.resizator.getWidth()/4))
+        try:
+            self.add_to_list_button = tk.Button(self.button_container, text="Add to list", command=lambda:addIpAddressToList.add(self,ip_addresses,self.entry.get(),self.state_label.cget("text").split(":")[1]))
+            self.add_to_list_button.pack(pady=10, side=tk.TOP)
+            self.add_to_list_button.config(width=int(self.resizator.getWidth()/4))
 
-        self.refresh_all_button = tk.Button(self.button_container, text="Refresh all", command=lambda: refreshAll())
-        self.refresh_all_button.pack(pady=10, side=tk.TOP)
-        self.refresh_all_button.config(width=int(self.resizator.getWidth()/4))
-
+            self.refresh_all_button = tk.Button(self.button_container, text="Refresh all", command=lambda: refreshAll())
+            self.refresh_all_button.pack(pady=10, side=tk.TOP)
+            self.refresh_all_button.config(width=int(self.resizator.getWidth()/4))
+        except Exception as e:
+            print(e)
+            self.exitProgram(ip_addresses)
     def run(self):
         self.root.mainloop()
     
