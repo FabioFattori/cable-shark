@@ -9,10 +9,15 @@ CableShark è un'applicazione che permette di effettuare il ping a uno o più in
 
 # Come avviare il progetto
 - clonare il progetto
-- eseguire lo script 'Start.sh' se si è su linux o 'Start.bat' se si è su windows, questo fa:
+- eseguire lo script 'Start.sh' se si è su linux/mac o 'Start.bat' se si è su windows, questo fa:
     - questo script controlla se è installato python 3.11 o superiore, se non lo è lo installa
     - installa le dipendenze necessarie per l'applicazione presenti nel file 'requirementsLinux.txt' o 'requirementsWindows.txt' a seconda del sistema operativo
     - avvia l'applicazione
+```bash
+git clone [url del progetto]
+./Start.sh # se si è su linux/mac
+.\Start.bat # se si è su windows
+```
 
 # Guida all'uso
 All'avvio dell'applicazione compare una finestra che è divisa in due parti:
@@ -40,7 +45,7 @@ Lo script 'Start.sh' o 'Start.bat' come ultimo passaggio eseguono 'python3 main.
 
 Appena viene aggiunta un indirizzo ip alla lista viene fatto partire un thread che effettua il ping all'indirizzo ip e aggiorna la label con lo stato dell'indirizzo ip, questo metodo è presente nel file graphicAddAndUpdate.py.
 
-# Funzionamento del ping
+## Funzionamento del ping
 
 Il ping viene effettuato tramite l'apertura di una socket e la construzione di un pacchetto icmp, il pacchetto viene inviato all'indirizzo ip e si aspetta una risposta.
 Il pacchetto viene costruito in questo modo:
@@ -49,3 +54,22 @@ Il pacchetto viene costruito in questo modo:
 - il checksum viene calcolato con la funzione calculate_checksum(header + data) presente nel file pinger.py
 
 Il pacchetto viene inviato con la funzione sendto(header + data, (ip, 1)) presente nel file pinger.py, il secondo parametro della funzione è una tupla con l'indirizzo ip e la porta, la porta 1 è la porta standard per il protocollo icmp; in seguito si aspetta una risposta tramite la funzione select del modulo select, che aspetta per 5 secondi una risposta, se non arriva nessuna risposta si considera l'indirizzo ip offline, altrimenti si considera online.
+
+# Dipendenze
+- python 3.11 o superiore
+- tkinter
+
+Di seguito i comandi per installarle su linux e windows:
+- linux: 
+    ```bash
+    - sudo apt-get install python3
+    - sudo apt-get install python3-tk
+- windows:
+    - installare python 3.11 #o superiore da https://www.python.org/downloads/
+    - installare tkinter con il comando 
+    ```bash
+    pip install tk
+OPPURE eseguire lo script 'Start.sh' se si è su linux o 'Start.bat' se si è su windows che fa già tutto questo in maniera automatica 
+
+# Autore
+- [Fabio Fattori](https://github.com/FabioFattori), numero di matricola: 0001071463
