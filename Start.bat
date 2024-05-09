@@ -27,13 +27,13 @@ if %py_major_version% leq 3 (
 @echo off
 
 REM Check if requirements.txt file exists
-if not exist Dependencies/requirements.txt (
-    echo Dependencies/requirements.txt file not found.
+if not exist Dependencies/requirementsWindows.txt (
+    echo Dependencies/requirementsWindows.txt file not found.
     exit /b 1
 )
 
 REM Read dependencies from requirements.txt
-for /f %%i in (Dependencies/requirements.txt) do (
+for /f %%i in (Dependencies/requirementsWindows.txt) do (
     REM Check if dependency is installed
     python -c "import %%i" >nul 2>&1
     if errorlevel 1 (
