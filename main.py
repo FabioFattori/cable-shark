@@ -1,7 +1,7 @@
 #open a new window and display the main loop
 import requestResponsens
 import threading
-import addIpAddressToList
+import graphicAddAndUpdate
 import GraphicsElement
 import tkinter as tk
 import os
@@ -32,7 +32,7 @@ def ping():
     
     # Create a thread for ping operation
     ping_thread = threading.Thread(target=perform_ping, args=(ip_address,))
-    with addIpAddressToList.getLock():
+    with graphicAddAndUpdate.getLock():
         ping_thread.start()
 
 def perform_ping(ip_address):
@@ -45,7 +45,7 @@ def perform_ping(ip_address):
 
 def refreshAll():
     for ip in ip_addresses:
-        ping_thread = threading.Thread(target=ip.pingMe, args=[addIpAddressToList.getLock()])
+        ping_thread = threading.Thread(target=ip.pingMe, args=[graphicAddAndUpdate.getLock()])
         ping_thread.start()
 
 

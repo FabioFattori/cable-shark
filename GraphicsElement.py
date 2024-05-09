@@ -1,8 +1,17 @@
 import tkinter as tk
 import Resizator
-import addIpAddressToList
+import graphicAddAndUpdate
+import requestResponsens
 
 class GraphicsManager:
+
+    def clearList(self,ip_addresses):
+        for ip in ip_addresses:
+            ip.stopPing()
+        ip_addresses.clear()
+        graphicAddAndUpdate.updateList(self.getAll().ip_addresses_container,ip_addresses)
+        return
+
     def exitProgram(self,ip_addresses):
         #kill all the threads
         for ip in ip_addresses:
@@ -59,6 +68,9 @@ class GraphicsManager:
         self.button_container.pack(side=tk.TOP)
         self.button_container.config(width=int(self.resizator.getWidth()/2))
 
+        
+        
+
         # create a container list for all the ip addresses
         self.ip_addresses_container = tk.Frame(self.lst,height=int(self.resizator.getHeight()/2))
         self.ip_addresses_container.pack(side=tk.TOP,after=self.button_container,pady=10,padx=10)
@@ -66,9 +78,14 @@ class GraphicsManager:
 
 
         try:
-            self.add_to_list_button = tk.Button(self.button_container, text="Add to list", command=lambda:addIpAddressToList.add(self,ip_addresses,self.entry.get(),self.state_label.cget("text").split(":")[1]))
+            self.add_to_list_button = tk.Button(self.button_container, text="Add to list", command=lambda:graphicAddAndUpdate.add(self,ip_addresses,self.entry.get(),requestResponsens.res[2]))
             self.add_to_list_button.pack(pady=10, side=tk.TOP)
             self.add_to_list_button.config(width=int(self.resizator.getWidth()/4))
+
+            self.clear_list_button = tk.Button(self.button_container, text="Clear list", command=lambda:self.clearList(ip_addresses))
+            self.clear_list_button.pack(pady=10, side=tk.TOP)
+            self.clear_list_button.config(width=int(self.resizator.getWidth()/4))
+        
 
             self.refresh_all_button = tk.Button(self.button_container, text="Refresh all", command=lambda: refreshAll())
             self.refresh_all_button.pack(pady=10, side=tk.TOP)

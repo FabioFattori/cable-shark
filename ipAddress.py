@@ -1,7 +1,7 @@
 import requestResponsens
 import pinger
 import threading
-import addIpAddressToList
+import graphicAddAndUpdate
 import time
 class ipAddress:
     def __init__(self, ip, old_state=requestResponsens.res[2]):
@@ -29,8 +29,8 @@ class ipAddress:
             #print the response and the state in the log.txt file
             with open("log.txt","a") as file:
                 file.write(self.__get_ip__()+"\n")
-                file.write("current state : "+self.__get_state__()+"\n")
-            return response[1]
+                file.write("current state : "+self.__get_state__()+"\n")    
+        return
     
     def automaticPing(self,manager,ip_addresses,lock):
         #create a thread for ping operation
@@ -38,6 +38,7 @@ class ipAddress:
         ping_thread.start()
         #wait for 5 seconds before pinging the ip again
         print("pinging")
-        addIpAddressToList.updateList(manager.getAll().ip_addresses_container,ip_addresses)
         self.automaticPingThread=threading.Timer(10,self.automaticPing,args=[manager,ip_addresses,lock])
         self.automaticPingThread.start()
+        if self.ip == ip_addresses[len(ip_addresses)-1].__get_ip__():
+            graphicAddAndUpdate.updateList(manager.getAll().ip_addresses_container,ip_addresses)
