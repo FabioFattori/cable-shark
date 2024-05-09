@@ -2,6 +2,7 @@ import ipAddress
 import addIpAddressToList
 import threading
 import tkinter as tk
+import socket
 
 lock = threading.Lock()
 
@@ -9,6 +10,10 @@ def getLock():
     return lock
 
 def add(window,container,ipEntered,state):
+    try:
+        socket.inet_aton(ipEntered)
+    except socket.error:
+        return "Indirizzo IP non valido"
     #check if the ip is already in the list
     for ip in container:
         if ip.__get_ip__() == ipEntered.split()[0] and len(ipEntered.split()[0]) != 0 and len(ipEntered.split(".")) == 4:

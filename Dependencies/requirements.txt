@@ -1,2 +1,1 @@
-tkinter
-threading
+python3-tk

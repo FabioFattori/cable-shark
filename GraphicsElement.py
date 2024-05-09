@@ -12,6 +12,7 @@ class GraphicsManager:
         self.root = tk.Tk()
         self.root.title(title)
         self.root.geometry("800x600")
+        self.root.minsize(400,300)
         self.resizator = Resizator.Resizer(toplevel=self.root,manager=self)
         self.resizator.bind_config()
         self.root.protocol("WM_DELETE_WINDOW", self.exitProgram)
